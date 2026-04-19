@@ -3,290 +3,284 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skrining Riwayat Kesehatan Online</title>
+    <title>Sistem Skrining Kesehatan Mandiri</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
+            background-color: #f8fafc;
         }
         .step-transition {
             transition: all 0.3s ease-in-out;
         }
-        .custom-radio:checked + label {
-            border-color: #2563eb;
-            background-color: #eff6ff;
-            color: #1e40af;
-        }
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 */
-            height: 0;
-            overflow: hidden;
-        }
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 0.75rem;
+        .hidden {
+            display: none;
         }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
+<body class="min-h-screen">
 
-    <div id="app" class="bg-white w-full max-w-2xl rounded-2xl shadow-xl overflow-hidden step-transition">
-        <!-- Header Section -->
-        <div class="bg-blue-600 p-6 text-white text-center">
-            <h1 class="text-2xl font-bold">Skrining Kesehatan Online</h1>
-            <p class="text-blue-100 text-sm mt-1">Layanan Deteksi Dini Risiko Penyakit Tidak Menular</p>
+    <!-- Header / Navbar -->
+    <header class="bg-blue-600 text-white shadow-lg p-4 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04a11.357 11.357 0 00-1.573 5.374c0 3.823 1.847 7.213 4.694 9.287l1.503 1.092l1.503-1.092C17.153 18.23 19 14.84 19 11.018a11.357 11.357 0 00-1.573-5.374z" />
+                </svg>
+                Skrining Sehat JKN
+            </h1>
+            <div class="text-sm bg-blue-500 px-3 py-1 rounded-full border border-blue-400">
+                Layanan Digital Terpadu
+            </div>
         </div>
+    </header>
 
-        <!-- Progress Bar -->
-        <div id="progressBarContainer" class="hidden h-1.5 w-full bg-blue-100">
-            <div id="progressBar" class="h-full bg-blue-500 transition-all duration-500" style="width: 0%"></div>
-        </div>
-
-        <!-- Content Area -->
-        <div class="p-6 md:p-8">
+    <main class="container mx-auto px-4 py-8 max-w-4xl">
+        
+        <!-- STEP 1: Registrasi / Data Diri -->
+        <section id="step1" class="step-transition bg-white rounded-2xl shadow-xl p-8">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Data Identitas Pasien</h2>
+                <p class="text-gray-500">Silakan lengkapi data diri Anda untuk memulai proses skrining.</p>
+            </div>
             
-            <!-- STEP 1: LOGIN / DATA DIRI -->
-            <div id="step-login" class="space-y-6">
-                <div class="text-center mb-6">
-                    <h2 class="text-xl font-semibold text-gray-800">Data Diri Pasien</h2>
-                    <p class="text-gray-500 text-sm">Silakan isi data diri Anda untuk memulai skrining</p>
+            <form id="formRegistration" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
+                        <input type="text" id="reg_nama" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Masukkan nama sesuai KTP">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">NIK (Nomor Induk Kependudukan)</label>
+                        <input type="number" id="reg_nik" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="16 Digit NIK">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tinggi Badan (cm)</label>
+                        <input type="number" id="reg_tb" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Contoh: 165">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Berat Badan (kg)</label>
+                        <input type="number" id="reg_bb" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Contoh: 70">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Lingkar Perut (cm)</label>
+                        <input type="number" id="reg_lp" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Contoh: 85">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Pilih Jenis Skrining</label>
+                        <select id="reg_tipe" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option value="">-- Pilih Tipe --</option>
+                            <option value="ibu">Skrining Ibu (Obesitas & Risiko)</option>
+                            <option value="balita">Skrining Balita (Stunting)</option>
+                        </select>
+                    </div>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="space-y-2">
-                        <label class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
-                        <input type="text" id="input-nama" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Masukkan nama lengkap">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="block text-sm font-medium text-gray-700">NIK (Nomor Induk Kependudukan)</label>
-                        <input type="number" id="input-nik" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="16 digit NIK">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="block text-sm font-medium text-gray-700">Tinggi Badan (cm)</label>
-                        <input type="number" id="input-tb" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Contoh: 170">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="block text-sm font-medium text-gray-700">Berat Badan (kg)</label>
-                        <input type="number" id="input-bb" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Contoh: 65">
-                    </div>
-                </div>
-
-                <button onclick="startScreening()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition duration-200 mt-4 shadow-lg shadow-blue-200">
-                    Masuk & Mulai Skrining <i class="fas fa-arrow-right ml-2"></i>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg transform transition active:scale-95 mt-6">
+                    Masuk / Mulai Skrining
                 </button>
+            </form>
+        </section>
+
+        <!-- STEP 2: Kuesioner (Ibu) -->
+        <section id="step2_ibu" class="step-transition hidden bg-white rounded-2xl shadow-xl p-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Skrining Ibu (Obesitas & Risiko)</h2>
+            <div id="q_ibu_container" class="space-y-6">
+                <!-- Questions injected by JS -->
             </div>
+            <button onclick="processResult('ibu')" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl shadow-lg mt-8">
+                Lihat Hasil Skrining
+            </button>
+        </section>
 
-            <!-- STEP 2: QUESTIONS (KUESIONER) -->
-            <div id="step-questions" class="hidden space-y-6">
-                <div id="question-header" class="mb-4">
-                    <span id="category-badge" class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded uppercase tracking-wider">Kategori</span>
-                    <h3 id="question-text" class="text-lg font-medium text-gray-800 mt-2 min-h-[60px]">Pertanyaan akan muncul di sini?</h3>
-                </div>
-
-                <div class="flex flex-col gap-3">
-                    <div class="relative">
-                        <input type="radio" name="answer" id="opt-ya" value="ya" class="hidden custom-radio">
-                        <label for="opt-ya" class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-blue-400 transition-all">
-                            <span class="font-medium text-lg text-gray-700">Ya</span>
-                            <i class="fas fa-check-circle text-gray-300"></i>
-                        </label>
-                    </div>
-                    <div class="relative">
-                        <input type="radio" name="answer" id="opt-tidak" value="tidak" class="hidden custom-radio">
-                        <label for="opt-tidak" class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-blue-400 transition-all">
-                            <span class="font-medium text-lg text-gray-700">Tidak</span>
-                            <i class="fas fa-times-circle text-gray-300"></i>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="flex justify-between items-center mt-8">
-                    <button id="btn-back" onclick="prevQuestion()" class="text-gray-500 hover:text-gray-700 font-medium">
-                        <i class="fas fa-chevron-left mr-1"></i> Kembali
-                    </button>
-                    <button id="btn-next" onclick="nextQuestion()" class="bg-blue-600 text-white px-8 py-2 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50" disabled>
-                        Lanjut
-                    </button>
-                </div>
+        <!-- STEP 2: Kuesioner (Balita) -->
+        <section id="step2_balita" class="step-transition hidden bg-white rounded-2xl shadow-xl p-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Skrining Balita (Stunting)</h2>
+            <div id="q_balita_container" class="space-y-6">
+                <!-- Questions injected by JS -->
             </div>
+            <button onclick="processResult('balita')" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl shadow-lg mt-8">
+                Lihat Hasil Skrining
+            </button>
+        </section>
 
-            <!-- STEP 3: RESULT (HASIL) -->
-            <div id="step-result" class="hidden space-y-8 animate-fade-in pb-8">
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-file-medical text-3xl"></i>
+        <!-- STEP 3: Hasil & Kesimpulan -->
+        <section id="step3" class="step-transition hidden space-y-6">
+            <div class="bg-white rounded-2xl shadow-xl p-8 border-l-8 border-yellow-500">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="p-3 bg-yellow-100 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
                     </div>
-                    <h2 class="text-2xl font-bold text-gray-800">Hasil Pelaksanaan Skrining</h2>
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800">Hasil Pelaksanaan Skrining Riwayat Kesehatan</h2>
+                        <p class="text-gray-600 font-medium" id="display_name"></p>
+                    </div>
                 </div>
 
-                <!-- Hasil Diagnosis Ringkas -->
-                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
-                    <p class="text-gray-800 leading-relaxed">
-                        Menurut hasil skrining yang telah Anda isi sebelumnya, Anda <strong class="text-red-600">Berisiko</strong> penyakit <strong>Hipertensi, Stroke, dan Penyakit Jantung Iskemik</strong>.
+                <div class="prose max-w-none text-gray-700 space-y-4">
+                    <p class="bg-gray-50 p-4 rounded-lg border-l-4 border-blue-500">
+                        Menurut hasil skrining yang telah anda isi sebelumnya <strong>Anda Berisiko penyakit Hipertensi, Stroke, dan Penyakit Jantung Iskemik.</strong>
+                        Segera lakukan konsultasi kesehatan dengan dokter dan Skrining Kesehatan di FKTP terdaftar.
                     </p>
-                    <p class="mt-4 font-semibold text-blue-800 italic">Segera lakukan konsultasi kesehatan dengan dokter dan Skrining Kesehatan di FKTP terdaftar.</p>
-                </div>
-
-                <!-- Bagian Edukasi Baru -->
-                <div class="space-y-6 pt-4 border-t border-gray-100">
-                    <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2">
-                        <i class="fas fa-graduation-cap text-blue-600"></i> Materi Edukasi Kesehatan
-                    </h3>
                     
-                    <!-- Video Edukasi -->
-                    <div class="space-y-3">
-                        <p class="text-sm font-medium text-gray-700">Video: Tips Pencegahan Penyakit Tidak Menular</p>
-                        <div class="video-container shadow-md border border-gray-200 rounded-xl">
-                            <!-- Link Video Edukasi (Contoh: Germas Kemenkes) -->
-                            <iframe src="https://www.youtube.com/embed/zAnV68uM1tY" title="Edukasi Kesehatan" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                        </div>
+                    <div class="bg-green-50 p-4 rounded-lg flex items-center gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                        <p>Anda sudah terdaftar sebagai peserta JKN dengan status kepesertaaan <strong>AKTIF</strong>.</p>
                     </div>
 
-                    <!-- Buku Panduan -->
-                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 flex items-center justify-between">
-                        <div class="flex items-center gap-4">
-                            <div class="bg-red-100 text-red-600 p-3 rounded-lg">
-                                <i class="fas fa-file-pdf text-xl"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-gray-800 text-sm">Buku Panduan Pola Hidup Sehat</h4>
-                                <p class="text-xs text-gray-500">Panduan CERDIK & PATUH dari Kemenkes RI</p>
-                            </div>
-                        </div>
-                        <a href="https://ayosehat.kemkes.go.id/pub/files/buku-saku-germas.pdf" target="_blank" class="bg-white border border-gray-300 px-4 py-2 rounded-lg text-xs font-bold hover:bg-gray-100 transition shadow-sm">
-                            BACA/UNDUH
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Informasi JKN -->
-                <div class="space-y-4">
-                    <div class="flex items-start gap-3 p-4 bg-green-50 rounded-lg">
-                        <i class="fas fa-id-card text-green-600 mt-1"></i>
-                        <p class="text-sm text-green-800">Anda sudah terdaftar sebagai peserta JKN dengan status kepesertaaan <strong class="underline">AKTIF</strong>.</p>
-                    </div>
-
-                    <p class="text-gray-600 text-xs leading-relaxed italic border-t pt-4">
+                    <p class="text-sm italic">
                         Pastikan status kepesertaan BPJS Kesehatan anda selalu aktif agar dapat mengakses layanan kesehatan dan selalu terlindungi dalam program JKN. Info lebih lanjut silakan hubungi BPJS Kesehatan Care Center 165.
                     </p>
                 </div>
-
-                <button onclick="location.reload()" class="w-full bg-gray-100 text-gray-700 font-semibold py-3 rounded-xl hover:bg-gray-200 transition">
-                    Selesai & Tutup
-                </button>
             </div>
 
-        </div>
-    </div>
+            <!-- Media Edukasi -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Video Section -->
+                <div class="bg-white rounded-2xl shadow-xl p-6">
+                    <h3 class="font-bold text-lg mb-4 flex items-center gap-2 text-red-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Video Edukasi Kesehatan
+                    </h3>
+                    <div class="aspect-video rounded-xl overflow-hidden bg-black flex items-center justify-center">
+                        <!-- Placeholder Video -->
+                        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <!-- Buku Panduan Section -->
+                <div class="bg-white rounded-2xl shadow-xl p-6">
+                    <h3 class="font-bold text-lg mb-4 flex items-center gap-2 text-blue-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                        Buku Panduan Digital
+                    </h3>
+                    <div class="border-2 border-dashed border-gray-200 rounded-xl p-6 flex flex-col items-center justify-center text-center">
+                        <div class="text-gray-400 mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-4">Panduan Pola Hidup Sehat & Pencegahan Penyakit Kronis</p>
+                        <button onclick="alert('Membuka PDF Panduan...')" class="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg font-semibold hover:bg-blue-200 transition">
+                            Baca Panduan (PDF)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="window.location.reload()" class="w-full text-blue-600 font-medium py-4">
+                Kembali ke Beranda
+            </button>
+        </section>
+
+    </main>
+
+    <footer class="mt-12 py-8 bg-gray-100 border-t border-gray-200 text-center text-gray-500 text-sm">
+        <p>&copy; 2024 Layanan Skrining Kesehatan Mandiri. Kerjasama Fasilitas Kesehatan & JKN.</p>
+    </footer>
 
     <script>
-        const questions = [
-            { category: "Riwayat Umum", text: "Apakah anda pernah dinyatakan menderita penyakit Hipertensi (tekanan darah tinggi) dan/atau Diabetes Melitus (kencing manis)?" },
-            { category: "Riwayat Umum", text: "Apakah anda pernah dinyatakan menderita penyakit Kardiovaskular (Stroke, Jantung, Pembuluh Darah dan penyakit Ginjal)?" },
-            { category: "Riwayat Keluarga", text: "Apakah anda mempunyai keluarga inti (ayah, ibu, saudara kandung) yang menderita penyakit tidak menular?" },
-            { category: "Gaya Hidup", text: "Apakah anda sedang/mempunyai riwayat merokok?" },
-            { category: "Gaya Hidup", text: "Apakah anda sedang/pernah mengkonsumsi minuman beralkohol?" },
-            { category: "Gaya Hidup", text: "Apakah anda terpapar asap rokok dalam waktu 1 bulan terakhir?" },
-            { category: "Skrining DM", text: "Apakah anda menderita Hipertensi (Tekanan darah tinggi)?" },
-            { category: "Skrining Thalasemia", text: "Apakah keluarga inti (ayah, ibu, saudara kandung) anda pernah di diagnosis menderita penyakit Talasemia atau menjalani transfusi darah rutin?" },
-            { category: "Skrining Thalasemia", text: "Apakah keluarga inti (ayah, ibu, saudara kandung) anda pernah di diagnosis sebagai pembawa sifat Talasemia?" },
-            { category: "Skrining TBC", text: "Apakah anda pernah memiliki riwayat kontak serumah dengan pasien/penderita Tuberkulosis (TBC)?" },
-            { category: "Skrining TBC", text: "Apakah anda pernah dinyatakan menderita penyakit Diabetes Melitus/kencing manis?" },
-            { category: "Skrining TBC", text: "Apakah anda penderita HIV (ODHIV)?" },
-            { category: "Skrining TBC", text: "Apakah anda sedang mengalami batuk lebih dari 2 minggu?" },
-            { category: "Skrining Hep-B", text: "Apakah anda pernah memiliki riwayat Pemeriksaan HbsAg dengan hasil reaktif/positif?" },
-            { category: "Skrining Hep-B", text: "Apakah anda memiliki anggota keluarga inti sedarah (sekandung) yang mengidap Hepatitis B?" },
-            { category: "Skrining Hep-B", text: "Apakah anda pernah melakukan hubungan seksual berisiko tanpa pengaman dengan pasangan yang tidak diketahui statusnya?" },
-            { category: "Skrining Hep-B", text: "Apakah ada riwayat menerima transfusi darah?" },
-            { category: "Skrining Hep-B", text: "Apakah anda sedang atau memiliki riwayat menjalani cuci darah/ hemodialisa?" },
-            { category: "Skrining Hep-B", text: "Apakah anda pengguna/ riwayat pengguna narkotika suntik (NAPZA)?" },
-            { category: "Skrining Hep-B", text: "Apakah anda mengidap HIV positif?" },
-            { category: "Skrining Hep-C", text: "Apakah anda pernah melakukan hubungan seksual berisiko tanpa pengaman dengan pasangan yang tidak diketahui statusnya?" },
-            { category: "Skrining Hep-C", text: "Apakah ada riwayat menerima transfusi darah?" },
-            { category: "Skrining Hep-C", text: "Apakah anda pengguna/ riwayat pengguna narkotika suntik (NAPZA)?" },
-            { category: "Skrining Hep-C", text: "Apakah anda sedang atau memiliki riwayat cuci darah/ hemodialisa?" },
-            { category: "Skrining Hep-C", text: "Apakah anda mengidap HIV positif?" },
-            { category: "Skrining Hep-C", text: "Apakah ada riwayat mendapatkan pengobatan hepatitis C dan tidak sembuh?" }
+        const questIbu = [
+            "Apakah Anda mengonsumsi makanan/minuman manis (teh manis, soda, kopi saset, kue) lebih dari 2 kali setiap hari?",
+            "Apakah Anda sering mengonsumsi makanan gorengan atau bersantan setiap hari?",
+            "Apakah Anda melakukan aktivitas fisik (seperti jalan kaki atau olahraga) minimal 30 menit sehari?",
+            "Apakah Anda merasa porsi makan nasi/karbohidrat Anda jauh lebih banyak dibandingkan sayur dan buah?",
+            "Apakah Anda memiliki riwayat tekanan darah tinggi atau kadar gula darah tinggi saat kehamilan atau saat ini?",
+            "Apakah ada anggota keluarga inti (orang tua) yang menderita obesitas atau diabetes?"
         ];
 
-        let currentQuestionIndex = 0;
-        let answers = [];
+        const questBalita = [
+            "Apakah anak Anda mendapatkan ASI Eksklusif selama 6 bulan pertama tanpa tambahan makanan/minuman lain?",
+            "Apakah saat ini anak diberikan protein hewani (telur, ikan, ayam, daging) setiap kali makan?",
+            "Apakah anak Anda sering mengalami penyakit infeksi yang berulang (seperti diare atau batuk pilek) dalam 3 bulan terakhir?",
+            "Apakah Anda rutin membawa anak ke Posyandu atau Puskesmas untuk memantau grafik pertumbuhan setiap bulan?",
+            "Apakah anak terlihat jauh lebih pendek dibandingkan teman sebaya seusianya?",
+            "Apakah sumber air minum di rumah Anda terlindungi dan memiliki akses sanitasi (jamban) yang sehat?"
+        ];
 
-        document.querySelectorAll('input[name="answer"]').forEach(radio => {
-            radio.addEventListener('change', () => {
-                document.getElementById('btn-next').disabled = false;
-            });
+        function createQuestionElement(text, index, prefix) {
+            return `
+                <div class="p-4 rounded-xl border border-gray-100 bg-gray-50 hover:bg-white transition shadow-sm">
+                    <p class="text-gray-800 font-medium mb-3">${index + 1}. ${text}</p>
+                    <div class="flex gap-4">
+                        <label class="flex-1 cursor-pointer">
+                            <input type="radio" name="${prefix}_q${index}" value="ya" class="hidden peer" required>
+                            <div class="text-center py-2 border border-gray-300 rounded-lg peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 hover:border-blue-500 transition">
+                                Ya
+                            </div>
+                        </label>
+                        <label class="flex-1 cursor-pointer">
+                            <input type="radio" name="${prefix}_q${index}" value="tidak" class="hidden peer">
+                            <div class="text-center py-2 border border-gray-300 rounded-lg peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 hover:border-blue-500 transition">
+                                Tidak
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Initialize questions
+        const ibuContainer = document.getElementById('q_ibu_container');
+        questIbu.forEach((q, i) => {
+            ibuContainer.innerHTML += createQuestionElement(q, i, 'ibu');
         });
 
-        function startScreening() {
-            const nama = document.getElementById('input-nama').value;
-            const nik = document.getElementById('input-nik').value;
-            const tb = document.getElementById('input-tb').value;
-            const bb = document.getElementById('input-bb').value;
+        const balitaContainer = document.getElementById('q_balita_container');
+        questBalita.forEach((q, i) => {
+            balitaContainer.innerHTML += createQuestionElement(q, i, 'balita');
+        });
 
-            if(!nama || !nik || !tb || !bb) {
-                alert("Harap lengkapi semua data diri sebelum memulai.");
+        // Form Submission Logic
+        const formReg = document.getElementById('formRegistration');
+        formReg.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const tipe = document.getElementById('reg_tipe').value;
+            const nama = document.getElementById('reg_nama').value;
+            
+            // Set global name display
+            document.getElementById('display_name').innerText = `Nama: ${nama}`;
+            
+            // Move to next step
+            document.getElementById('step1').classList.add('hidden');
+            if(tipe === 'ibu') {
+                document.getElementById('step2_ibu').classList.remove('hidden');
+            } else {
+                document.getElementById('step2_balita').classList.remove('hidden');
+            }
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        function processResult(tipe) {
+            const container = tipe === 'ibu' ? 'q_ibu_container' : 'q_balita_container';
+            const inputs = document.getElementById(container).querySelectorAll('input[type="radio"]:checked');
+            
+            // Check if all answered
+            if(inputs.length < (tipe === 'ibu' ? questIbu.length : questBalita.length)) {
+                alert("Harap jawab semua pertanyaan terlebih dahulu.");
                 return;
             }
 
-            document.getElementById('step-login').classList.add('hidden');
-            document.getElementById('step-questions').classList.remove('hidden');
-            document.getElementById('progressBarContainer').classList.remove('hidden');
+            // Hide questionnaires
+            document.getElementById('step2_ibu').classList.add('hidden');
+            document.getElementById('step2_balita').classList.add('hidden');
             
-            showQuestion();
-        }
-
-        function showQuestion() {
-            const q = questions[currentQuestionIndex];
-            document.getElementById('question-text').innerText = q.text;
-            document.getElementById('category-badge').innerText = q.category;
-            
-            document.querySelectorAll('input[name="answer"]').forEach(r => r.checked = false);
-            document.getElementById('btn-next').disabled = true;
-
-            const progress = ((currentQuestionIndex) / questions.length) * 100;
-            document.getElementById('progressBar').style.width = `${progress}%`;
-
-            document.getElementById('btn-back').style.visibility = (currentQuestionIndex === 0) ? 'hidden' : 'visible';
-            document.getElementById('btn-next').innerText = (currentQuestionIndex === questions.length - 1) ? "Lihat Hasil" : "Lanjut";
-        }
-
-        function nextQuestion() {
-            const selected = document.querySelector('input[name="answer"]:checked').value;
-            answers[currentQuestionIndex] = selected;
-
-            if (currentQuestionIndex < questions.length - 1) {
-                currentQuestionIndex++;
-                showQuestion();
-            } else {
-                showResult();
-            }
-        }
-
-        function prevQuestion() {
-            if (currentQuestionIndex > 0) {
-                currentQuestionIndex--;
-                showQuestion();
-            }
-        }
-
-        function showResult() {
-            document.getElementById('step-questions').classList.add('hidden');
-            document.getElementById('step-result').classList.remove('hidden');
-            document.getElementById('progressBar').style.width = `100%`;
-            document.getElementById('progressBar').classList.replace('bg-blue-500', 'bg-green-500');
-            // Scroll ke atas otomatis agar hasil terlihat jelas
+            // Show result
+            document.getElementById('step3').classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
-
 </body>
 </html>
