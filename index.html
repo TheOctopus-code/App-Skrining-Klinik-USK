@@ -69,11 +69,38 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Pilih Jenis Skrining</label>
-                        <select id="reg_tipe" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                        <select id="reg_tipe" required onchange="toggleExtraFields(this.value)" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
                             <option value="">-- Pilih Tipe --</option>
                             <option value="ibu">Skrining Ibu (Obesitas & Risiko)</option>
                             <option value="balita">Skrining Balita (Stunting)</option>
                         </select>
+                    </div>
+                </div>
+
+                <!-- Extra Fields for Balita -->
+                <div id="extra_fields_balita" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-gray-100">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Lahir Anak</label>
+                        <input type="date" id="reg_tgl_lahir" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Kelamin Anak</label>
+                        <select id="reg_jk" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option value="">-- Pilih JK --</option>
+                            <option value="L">Laki-laki</option>
+                            <option value="P">Perempuan</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Apakah Imunisasi Lengkap?</label>
+                        <div class="flex gap-4">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="reg_imunisasi" value="ya" class="w-4 h-4 text-blue-600"> Ya
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="reg_imunisasi" value="tidak" class="w-4 h-4 text-blue-600"> Tidak
+                            </label>
+                        </div>
                     </div>
                 </div>
                 
@@ -151,7 +178,6 @@
                         Video Edukasi Kesehatan
                     </h3>
                     <div class="aspect-video rounded-xl overflow-hidden bg-black flex items-center justify-center">
-                        <!-- Placeholder Video -->
                         <iframe width="100%" height="100%" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
                 </div>
@@ -190,13 +216,17 @@
     </footer>
 
     <script>
+        // Updated Question Lists
         const questIbu = [
             "Apakah Anda mengonsumsi makanan/minuman manis (teh manis, soda, kopi saset, kue) lebih dari 2 kali setiap hari?",
             "Apakah Anda sering mengonsumsi makanan gorengan atau bersantan setiap hari?",
             "Apakah Anda melakukan aktivitas fisik (seperti jalan kaki atau olahraga) minimal 30 menit sehari?",
             "Apakah Anda merasa porsi makan nasi/karbohidrat Anda jauh lebih banyak dibandingkan sayur dan buah?",
             "Apakah Anda memiliki riwayat tekanan darah tinggi atau kadar gula darah tinggi saat kehamilan atau saat ini?",
-            "Apakah ada anggota keluarga inti (orang tua) yang menderita obesitas atau diabetes?"
+            "Apakah ada anggota keluarga inti (orang tua) yang menderita obesitas atau diabetes?",
+            "Apakah ada riwayat kegemukan sebelum hamil?",
+            "Apakah saat ini mempunyai anak berusia balita (di bawah 5 tahun) dan baduta (di bawah 2 tahun)?",
+            "Apakah saat ini sedang menyusui, atau sedang hamil?"
         ];
 
         const questBalita = [
@@ -205,8 +235,21 @@
             "Apakah anak Anda sering mengalami penyakit infeksi yang berulang (seperti diare atau batuk pilek) dalam 3 bulan terakhir?",
             "Apakah Anda rutin membawa anak ke Posyandu atau Puskesmas untuk memantau grafik pertumbuhan setiap bulan?",
             "Apakah anak terlihat jauh lebih pendek dibandingkan teman sebaya seusianya?",
-            "Apakah sumber air minum di rumah Anda terlindungi dan memiliki akses sanitasi (jamban) yang sehat?"
+            "Apakah sumber air minum di rumah Anda terlindungi?",
+            "Apakah rumah Anda memiliki akses sanitasi (jamban) yang sehat?"
         ];
+
+        function toggleExtraFields(val) {
+            const extra = document.getElementById('extra_fields_balita');
+            const inputs = extra.querySelectorAll('input, select');
+            if(val === 'balita') {
+                extra.classList.remove('hidden');
+                inputs.forEach(i => i.setAttribute('required', 'true'));
+            } else {
+                extra.classList.add('hidden');
+                inputs.forEach(i => i.removeAttribute('required'));
+            }
+        }
 
         function createQuestionElement(text, index, prefix) {
             return `
@@ -264,11 +307,12 @@
         });
 
         function processResult(tipe) {
-            const container = tipe === 'ibu' ? 'q_ibu_container' : 'q_balita_container';
-            const inputs = document.getElementById(container).querySelectorAll('input[type="radio"]:checked');
+            const containerId = tipe === 'ibu' ? 'q_ibu_container' : 'q_balita_container';
+            const totalQuestions = tipe === 'ibu' ? questIbu.length : questBalita.length;
+            const inputs = document.getElementById(containerId).querySelectorAll('input[type="radio"]:checked');
             
             // Check if all answered
-            if(inputs.length < (tipe === 'ibu' ? questIbu.length : questBalita.length)) {
+            if(inputs.length < totalQuestions) {
                 alert("Harap jawab semua pertanyaan terlebih dahulu.");
                 return;
             }
